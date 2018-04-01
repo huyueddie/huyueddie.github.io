@@ -1,0 +1,13 @@
+body {
+	text-align: center;
+}
+
+p{
+	font-size: 56px;
+}
+p {
+    padding: 20px;
+    width: 320px;
+    height: 40px;
+    margin-left: 50px;
+}
