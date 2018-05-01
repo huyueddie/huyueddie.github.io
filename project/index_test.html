@@ -36,7 +36,7 @@ circle {
 <script src="./Income Distributions by Main Occupation_files/d3-3-5-5.min.js"></script>
 <script>
 var FAKE_DATA = [.01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01];
-var DATA_FILE_LOC = "/data/income-by-occ.tsv";
+var DATA_FILE_LOC = "project/data/income-by-occ.tsv";
 var OCC_NAMES = {
 "1":	{ "name": "Management", color: "#6b8ef7" },
 "2":	{ "name": "Business Operations", color: "#7b99f8" },
@@ -80,7 +80,7 @@ var margin = {top: 45, right: 70, bottom: 50, left: 215 },
     maxRadius = 4,
     damper = 0.8;
 
-var n = 50, // total number of nodes
+var n = 50, // total number of nodes -- used in var cnt = Math.round(d * n)
     n_adj = 52;
 
 // Scales
@@ -120,6 +120,7 @@ var yAxis = d3.svg.axis()
 d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 	if (error) throw error;
     var value_fields = d3.range(1,43).map(function(d) { return "inc"+d});
+    console.log(value_fields) //returns inc row headers as index
     var occ = d3.nest()
         .key(function(d) { return d.occ; })
         .entries(data);
@@ -244,7 +245,6 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                     };
                 });
                 // if (i == temp_data.length-1 && (cnt_so_far + cnt) < )
-
                 temp_nodes = temp_nodes.concat(new_nodes);
                 cnt_so_far += cnt;
             });
