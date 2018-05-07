@@ -67,7 +67,7 @@ var OCC_NAMES = {
 // "27":	{ "name": "No Occupation", color: "#cccccc" }
 }
 var occs_in_order = [9,1,12,3,5,2,7,4,6,14,11,18,10,8,21,23,19,22,24,25,26,16,13,15,17,20];
-
+// var occs_in_order = [9,1,12,3,5,2,7,4,6,14,11,18,10,8,19,16,13,15,17,20]
 
 var CURR_YEAR_INDEX = 0;
 var YEARS = [1960, 1970, 1980, 1990, 2000, 2010, 2014];
@@ -75,7 +75,8 @@ var USER_YEAR = 1970;
 
 var margin = {top: 45, right: 70, bottom: 50, left: 215 },
     width = 900 - margin.left - margin.right,
-	height = 750 - margin.top - margin.bottom,
+	//height = 750 - margin.top - margin.bottom,
+    height = 1000 - margin.top - margin.bottom, // AW: changed height for greater space between rows
     padding = 3, // separation between nodes
     maxRadius = 4,
     damper = 0.8;
@@ -131,13 +132,16 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
         var curr_vals = o.values[CURR_YEAR_INDEX];
         var temp_data0 = value_fields.map(function(name) {
             return curr_vals[name];
+
         });
+        // console.log(temp_data0)
         var total = d3.sum(temp_data0);
         var temp_data = temp_data0.map(function(d) { return d / total; })
-
+        // console.log(temp_data)
         var cnt_so_far = 0;
         temp_data.forEach(function(d,i) {
             var cnt = Math.round(d * n);
+            // console.log(cnt)
             var new_nodes = d3.range(cnt).map(function() {
                 return {
                     radius: maxRadius,
@@ -146,8 +150,10 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                     cy: y(o.key),
                 };
             });
+            // console.log(new_nodes)
             nodes = nodes.concat(new_nodes);
             cnt_so_far += cnt;
+            console.log(cnt_so_far)
         });
         OCC_NAMES[o.key].cnt = cnt_so_far;
 
