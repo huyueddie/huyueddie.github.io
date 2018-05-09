@@ -90,7 +90,7 @@ var n = 50, // total number of nodes -- used in var cnt = Math.round(d * n)
 //     .domain(occs_in_order);
 
 var x = d3.scale.linear()
-    .domain([0, 40])
+    .domain([0, 40])//what does this 40 mean? this 40 has nothing to do with the 42 incs
     .range([0, width-margin.right]);
 var y = d3.scale.ordinal()
     .domain(occs_in_order)
