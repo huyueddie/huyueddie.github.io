@@ -36,7 +36,7 @@ circle {
 <script src="./Income Distributions by Main Occupation_files/d3-3-5-5.min.js"></script>
 <script>
 var FAKE_DATA = [.01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01];
-var DATA_FILE_LOC = "data/income-by-occ.tsv";
+var DATA_FILE_LOC = "data/income-by-occ_test.txt";
 var OCC_NAMES = {
 "1":	{ "name": "Management", color: "#6b8ef7" },
 "2":	{ "name": "Business Operations", color: "#7b99f8" },
@@ -81,16 +81,17 @@ var margin = {top: 45, right: 70, bottom: 50, left: 215 },
     maxRadius = 4,
     damper = 0.8;
 
-var n = 50, // total number of nodes -- used in var cnt = Math.round(d * n)
-    n_adj = 52;
+var n = 150, // total number of nodes -- used in var cnt = Math.round(d * n) //100 new columns
+    n_adj = 152; //100 new columns
 
 // Scales
 // var color = d3.scale.category20()
 //     .domain(occs_in_order);
 
 var x = d3.scale.linear()
-    .domain([0, 40])
+    .domain([0, 140]) //100 new columns
     .range([0, width-margin.right]);
+
 var y = d3.scale.ordinal()
     .domain(occs_in_order)
     .rangePoints([0, height]);
@@ -111,7 +112,7 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .tickSize(20)
     .tickFormat(function(d) {
-        console.log(d);
+        //console.log(d);
         return OCC_NAMES[d]['name'];
     })
     .orient("left");
@@ -120,7 +121,7 @@ var yAxis = d3.svg.axis()
 // Load data.
 d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 	if (error) throw error;
-    var value_fields = d3.range(1,43).map(function(d) { return "inc"+d});
+    var value_fields = d3.range(1,143).map(function(d) { return "inc"+d}); //100 new columns
     console.log(value_fields) //returns inc row headers as index
     var occ = d3.nest()
         .key(function(d) { return d.occ; })
@@ -137,11 +138,12 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
         // console.log(temp_data0)
         var total = d3.sum(temp_data0);
         var temp_data = temp_data0.map(function(d) { return d / total; })
+        console.log(temp_data);
         // console.log(temp_data)
         var cnt_so_far = 0;
         temp_data.forEach(function(d,i) {
             var cnt = Math.round(d * n);
-            // console.log(cnt)
+            console.log(x(i))
             var new_nodes = d3.range(cnt).map(function() {
                 return {
                     radius: maxRadius,
@@ -153,7 +155,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
             // console.log(new_nodes)
             nodes = nodes.concat(new_nodes);
             cnt_so_far += cnt;
-            console.log(cnt_so_far)
+            //console.log(cnt_so_far)
         });
         OCC_NAMES[o.key].cnt = cnt_so_far;
 
@@ -163,7 +165,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                 return {
                     radius: maxRadius,
                     color: "none",
-                    cx: x(41),
+                    cx: x(141), //100 new columns
                     cy: y(o.key),
                 }
             });
@@ -261,7 +263,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                     return {
                         radius: maxRadius,
                         color: "none",
-                        cx: x(41),
+                        cx: x(1141),//100 new columns
                         cy: y(o.key),
                     }
                 });
