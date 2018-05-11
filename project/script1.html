@@ -154,7 +154,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
             return {
               radius:maxRadius,
               color:OCC_NAMES[o.key].color,
-              cx:x(d),
+              cx:x(i),
               cy:y(o.key),
             };
         });
@@ -170,7 +170,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
             return {
                 radius: maxRadius,
                 color: "none",
-                cx: x(200),//range is 40,
+                cx: x(201),//range is 40,
                 cy: y(o.key),
             }//creating fake dots for those which have total cnt less than 52
         });
