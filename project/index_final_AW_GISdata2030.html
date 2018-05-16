@@ -24,10 +24,10 @@ circle {
 <div id="controls">
 <div id="buttons">
 <h3>Select Year</h3>
-<div class="button current" data-val="0">1960</div>
-<div class="button" data-val="2">1980</div>
-<div class="button" data-val="4">2000</div>
-<div class="button" data-val="6" style="margin-right:0">2014</div>
+<div class="button current" data-val="0">2013</div>
+<div class="button" data-val="1">2030</div>
+<div class="button" data-val="2" style="margin-right:0">2070</div>
+<!-- <div class="button" data-val="6" style="margin-right:0">2014</div> -->
 <div class="clr"></div>
 </div>
 </div>
@@ -35,45 +35,43 @@ circle {
 </div>
 <script src="./Income Distributions by Main Occupation_files/d3-3-5-5.min.js"></script>
 <script>
-var FAKE_DATA = [.01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01];
+//var FAKE_DATA = [.01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01];
 // 40 in total, we don't actually use it.
-var DATA_FILE_LOC = "data/income-by-occ.tsv";
+var DATA_FILE_LOC = "data/data_tsv_GIS51118_modified2030.txt";
 var OCC_NAMES = {
-"1":	{ "name": "Management", color: "#6b8ef7" },
-"2":	{ "name": "Business Operations", color: "#7b99f8" },
-"3":	{ "name": "Finance", color: "#abbffb" },
-"4":	{ "name": "Computer & Mathematical", color: "#05b1b5" },
-"5":	{ "name": "Architecture & Engineering", color: "#037173" },
-"6":	{ "name": "Technicians", color: "#07d3d5" },
-"7":	{ "name": "Life & Social Science", color: "#048183" },
-"8":	{ "name": "Community & Social Services", color: "#e175e6" },
-"9":	{ "name": "Legal", color: "#2a5cf4" },
-"10":	{ "name": "Education & Library", color: "#9f1ea4" },
-"11":	{ "name": "Entertainment & Media", color: "#d43039" },
-"12":	{ "name": "Healthcare Practitioners", color: "#38c30b" },
-"13":	{ "name": "Healthcare Support", color: "#38c40a" },
-"14":	{ "name": "Protective Service", color: "#751679" },
-"15":	{ "name": "Food Preparation", color: "#e1b301" },
-"16":	{ "name": "Cleaning & Maintenance", color: "#bf9801" },
-"17":	{ "name": "Personal Care & Service", color: "#eaa0ee" },
-"18":	{ "name": "Sales", color: "#dd5a62" },
-"19":	{ "name": "Administrative Support", color: "#eca0a5" },
-"20":	{ "name": "Farming & Forestry", color: "#fedc5b" },
-"21":	{ "name": "Construction", color: "#cf6001" },
-"22":	{ "name": "Extraction", color: "#feaf6a" },
-"23":	{ "name": "Maintenance & Repair", color: "#fe7805" },
-"24":	{ "name": "Production", color: "#fe9338" },
-"25":	{ "name": "Transportation", color: "#ffd3ae" },
-"26":	{ "name": "Military", color: "#8c7001" },
+"2":	{ "name": "2__________", color: "#6b8ef7" },
+"4":	{ "name": "4__________", color: "#7b99f8" },
+"6":	{ "name": "6__________", color: "#abbffb" },
+"7":	{ "name": "7__________", color: "#05b1b5" },
+"8":	{ "name": "8__________", color: "#037173" },
+"14":	{ "name": "14__________", color: "#07d3d5" },
+"16":	{ "name": "16__________", color: "#048183" },
+"17":	{ "name": "17__________", color: "#e175e6" },
+"24":	{ "name": "24__________", color: "#2a5cf4" },
+"26":	{ "name": "26__________", color: "#9f1ea4" },
+"27":	{ "name": "27__________", color: "#d43039" },
+"29":	{ "name": "29__________", color: "#751679" },
+"30":	{ "name": "30__________", color: "#e1b301" },
+"31":	{ "name": "31__________", color: "#bf9801" },
+"32":	{ "name": "32__________", color: "#eaa0ee" },
+"33":	{ "name": "33__________", color: "#dd5a62" },
+"34":	{ "name": "34__________", color: "#eca0a5" },
+// "20":	{ "name": "Farming & Forestry", color: "#fedc5b" },
+// "21":	{ "name": "Construction", color: "#cf6001" },
+// "22":	{ "name": "Extraction", color: "#feaf6a" },
+// "23":	{ "name": "Maintenance & Repair", color: "#fe7805" },
+// "24":	{ "name": "Production", color: "#fe9338" },
+// "25":	{ "name": "Transportation", color: "#ffd3ae" },
+// "26":	{ "name": "Military", color: "#8c7001" },
 // "27":	{ "name": "No Occupation", color: "#cccccc" }
 }
 // 26 categories
-var occs_in_order = [9,1,12,3,5,2,7,4,6,14,11,18,10,8,21,23,19,22,24,25,26,16,13,15,17,20];
+var occs_in_order = [2,4,6,7,8,14,16,17,24,26,27,29,30,31,32,33,34];
 // change the order of categories according to the features of the data
 
 var CURR_YEAR_INDEX = 0;
-var YEARS = [1960, 1970, 1980, 1990, 2000, 2010, 2014];
-var USER_YEAR = 1970;
+var YEARS = [2030];
+//var USER_YEAR = 1970;
 
 var margin = {top: 45, right: 70, bottom: 50, left: 215 },
     width = 900 - margin.left - margin.right,
@@ -90,7 +88,7 @@ var n = 50, // total number of nodes -- used in var cnt = Math.round(d * n)
 //     .domain(occs_in_order);
 
 var x = d3.scale.linear()
-    .domain([0, 200000])//what does this 40 mean? this 40 has nothing to do with the 42 incs
+    .domain([0, 60])//what does this 40 mean? this 40 has nothing to do with the 42 incs
     .range([0, width-margin.right]);
 var y = d3.scale.ordinal()
     .domain(occs_in_order)
@@ -100,10 +98,10 @@ var y = d3.scale.ordinal()
 var xAxis = d3.svg.axis()
     .scale(x)
     .tickFormat(function(d) {
-        if (d == 40) {
-            return ">$" + d*5 + "k";
+        if (d == 60) {
+            return ">" + d;
         } else {
-            return "$" + d*5 + "k";
+            return d;
         }
     })//the function is setting the text on the scale, especially where to put the ">" mark
     .tickSize(height+20)
@@ -121,33 +119,33 @@ var yAxis = d3.svg.axis()
 // Load data.
 d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 	if (error) throw error;
-    var value_fields = d3.range(1,43).map(function(d) { return "inc"+d});
+    var value_fields = d3.range(1,100).map(function(d) { return "inc"+d});
     console.log(value_fields) //returns inc row headers as index
     var occ = d3.nest()
-        .key(function(d) { return d.occ; })
+        .key(function(d) { return d.neigh; })
         .entries(data);
+    console.log(occ);
 
     // Init nodes based on props
     var nodes = [];
     occ.forEach(function(o,occ_i) {
         var curr_vals = o.values[CURR_YEAR_INDEX];
+        console.log(o, curr_vals);
         var temp_data0 = value_fields.map(function(name) {
             return curr_vals[name]; //temp_data0 is pulling in the data for inc1,2,.....,42.
         });
         var total = d3.sum(temp_data0);
-        var temp_data = temp_data0.map(function(d) { return d; })//counting the percentage of inc/total
+        var temp_data = temp_data0.map(function(d) { return d; })
+
+        console.log(temp_data);
 
         var cnt_so_far = 0;
 
         temp_data.forEach(function(d,i){
-
-            console.log("inc",d);
-
             nodes.push(
                     {
                         radius: maxRadius,
                         color: OCC_NAMES[o.key].color,
-
                         cx: x(d),
                         cy: y(o.key),
                     }//creating new nodes with a list of attributes for each
@@ -247,56 +245,57 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 
 		timer();
 	});
-
+  //console.log(CURR_YEAR_INDEX)
 
     function timer() {
 
         console.log(YEARS[CURR_YEAR_INDEX]);
 
         var temp_nodes = [];
+
         occ.forEach(function(o,occ_i) {
             var curr_vals = o.values[CURR_YEAR_INDEX];
+
+            console.log(o, curr_vals);
+
             var temp_data0 = value_fields.map(function(name) {
-                return curr_vals[name];
+              // console.log(name);
+                return curr_vals[name]; //temp_data0 is pulling in the data for inc1,2,.....,42.
             });
+            //console.log(temp_data0)
             var total = d3.sum(temp_data0);
-            var temp_data = temp_data0.map(function(d) { return d / total; })
-
+            var temp_data = temp_data0.map(function(d) { return d; })
+            //console.log(temp_data)
             var cnt_so_far = 0;
-            temp_data.forEach(function(d,i) {
-                var cnt = Math.round(d * n);
 
-                var new_nodes = d3.range(cnt).map(function() {
-                    return {
-                        color: OCC_NAMES[o.key].color,
-                        cx: x(i),
-                    };
-                });
-                // if (i == temp_data.length-1 && (cnt_so_far + cnt) < )
-                temp_nodes = temp_nodes.concat(new_nodes);
-                cnt_so_far += cnt;
+            temp_data.forEach(function(d,i){
+                //console.log("inc",d);
+                nodes.push(
+                        {
+                            radius: maxRadius,
+                            color: OCC_NAMES[o.key].color,
+                            cx: x(d),
+                            cy: y(o.key),
+                        }//creating new nodes with a list of attributes for each
+                    );
+                        //console.log(d)
             });
+            OCC_NAMES[o.key].cnt = cnt_so_far;//creating 'cnt' attribute
 
-            var diff_extra = n_adj - cnt_so_far;
-            if (diff_extra > 0) {
-                var empty_nodes = d3.range(diff_extra).map(function() {
-                    return {
-                        radius: maxRadius,
-                        color: "none",
-                        cx: x(41),
-                        cy: y(o.key),
-                    }
+            console.log("nodes: " + nodes.length + "; temp_nodes: " + temp_nodes.length);
+
+            d3.range(nodes.length).map(function(i) {
+                var curr_node = nodes[i];
+                curr_node.cx = temp_nodes[i].cx;
                 });
-                temp_nodes = temp_nodes.concat(empty_nodes);
-            }
-        });
 
-        console.log("nodes: " + nodes.length + "; temp_nodes: " + temp_nodes.length);
-
-        d3.range(nodes.length).map(function(i) {
-            var curr_node = nodes[i];
-            curr_node.cx = temp_nodes[i].cx;
         });
+        // console.log("nodes: " + nodes.length + "; temp_nodes: " + temp_nodes.length);
+        //
+        // d3.range(nodes.length).map(function(i) {
+        //     var curr_node = nodes[i];
+        //     curr_node.cx = temp_nodes[i].cx;
+        // });
 
         force.resume();
 
@@ -313,6 +312,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
           .attr("cx", function(d) { return d.x; })
           .attr("cy", function(d) { return d.y; })
           .style("fill", function(d) { return d.color; });
+
     }
 
     // Move nodes toward cluster focus.
