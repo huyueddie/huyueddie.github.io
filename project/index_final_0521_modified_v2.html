@@ -37,7 +37,7 @@ circle {
 <script>
 //var FAKE_DATA = [.01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01];
 // 40 in total, we don't actually use it.
-var DATA_FILE_LOC = "data/data_tsv_GIS51118_modified.txt";
+var DATA_FILE_LOC = "data/depth_tsv_GIS52216_modified_test500.txt";
 var OCC_NAMES = {
 "2":	{ "name": "Back Bay ", color: "#6b8ef7" },
 "4":	{ "name": "Charlestown ", color: "#7b99f8" },
@@ -88,7 +88,7 @@ var n = 50, // total number of nodes -- used in var cnt = Math.round(d * n)
 //     .domain(occs_in_order);
 
 var x = d3.scale.linear()
-    .domain([0, 60])//what does this 40 mean? this 40 has nothing to do with the 42 incs
+    .domain([0, 6])//what does this 40 mean? this 40 has nothing to do with the 42 incs
     .range([0, width-margin.right]);
 var y = d3.scale.ordinal()
     .domain(occs_in_order)
@@ -98,7 +98,7 @@ var y = d3.scale.ordinal()
 var xAxis = d3.svg.axis()
     .scale(x)
     .tickFormat(function(d) {
-        if (d == 60) {
+        if (d == 6) {
             return ">" + d;
         } else {
             return d;
@@ -119,19 +119,20 @@ var yAxis = d3.svg.axis()
 // Load data.
 d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 	if (error) throw error;
-    var value_fields = d3.range(1,100).map(function(d) { return "inc"+d});
+    var value_fields = d3.range(1,579).map(function(d) { return "inc"+d});
     // console.log(value_fields) //returns inc row headers as index
     var occ = d3.nest()
         .key(function(d) { return d.neigh; })
         .entries(data);
     // console.log(occ);
 
-    drawnodes(CURR_YEAR_INDEX);
+    drawnodes(CURR_YEAR_INDEX); //was not originally commented
 
   //console.log(CURR_YEAR_INDEX)
 
+
     function drawnodes(CURR_YEAR_INDEX) {
-        d3.select(".main-svg").remove();
+        d3.select(".circle-svg").remove();
 
         // Init nodes based on props
         var nodes = [];
@@ -142,8 +143,11 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                 return curr_vals[name]; //temp_data0 is pulling in the data for inc1,2,.....,42.
             });
             var total = d3.sum(temp_data0);
-            var temp_data = temp_data0.map(function(d) { return d; })
-
+            var temp_data = temp_data0.map(function(d) {
+              if (d>6 & d<99998) {
+                return 6.1;
+              } else {
+                return d; }});
             // console.log(temp_data);
 
             var cnt_so_far = 0;
@@ -182,11 +186,12 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // X axis
-        svg.append("g")
+        svg.append("g").classed("axis-svg",true)
             .attr("class", "x axis")
             .attr("transform", "translate(0," + (height) + ")")
             .call(xAxis);
         // x axis bottom
+
         xAxis.orient("bottom").tickSize(20);
         svg.append("g")
             .attr("class", "x axis")
@@ -201,13 +206,25 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
         // Make circle for each node
         var circle = svg.selectAll("circle")
             .data(nodes)
-        .enter().append("circle")
+        .enter().append("circle").classed("circle-svg",true)
             .attr("r", function(d) { return d.radius; })
             .style("fill", function(d) { return d.color; });
             // .call(force.drag);
 
 
-        // Controls
+        // // Controls
+        // d3.selectAll(".button").on("click", function() {
+        //     CURR_YEAR_INDEX = d3.select(this).attr("data-val");
+        //     d3.select(".current").classed("current", false);
+        //     d3.select(this).classed("current", true);
+        //     damper = 0.15;
+        //
+        //     drawnodes(CURR_YEAR_INDEX);
+        //
+        //     // timer();
+        // });
+
+//image
         d3.selectAll(".button").on("click", function() {
             CURR_YEAR_INDEX = d3.select(this).attr("data-val");
             d3.select(".current").classed("current", false);
@@ -219,6 +236,8 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
             // timer();
         });
 
+        .append("image")
+            .attr("xlink:href", 'https://assets-cdn.github.com/images/modules/open_graph/github-octocat.png')
 
         function tick(e) {
         circle
