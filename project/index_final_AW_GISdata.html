@@ -124,40 +124,40 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
     var occ = d3.nest()
         .key(function(d) { return d.neigh; })
         .entries(data);
-    console.log(occ);
+    // console.log(occ);
 
     // Init nodes based on props
-    var nodes = [];
+    var temp_nodes = [];
     occ.forEach(function(o,occ_i) {
         var curr_vals = o.values[CURR_YEAR_INDEX];
-        console.log(o, curr_vals);
+        // console.log(o, curr_vals);
         var temp_data0 = value_fields.map(function(name) {
             return curr_vals[name]; //temp_data0 is pulling in the data for inc1,2,.....,42.
         });
         var total = d3.sum(temp_data0);
         var temp_data = temp_data0.map(function(d) { return d; })
 
-        console.log(temp_data);
+        // console.log(temp_data);
 
         var cnt_so_far = 0;
 
         temp_data.forEach(function(d,i){
-          var new_nodes = d3.range(d).map(function(){
-            return {
-              color:OCC_NAMES[o.key].color,
-              cx:x(d)
-            };
-          });
-            // nodes.push(
-            //         {
-            //             radius: maxRadius,
-            //             color: OCC_NAMES[o.key].color,
-            //             cx: x(d),
-            //             cy: y(o.key),
-            //         }//creating new nodes with a list of attributes for each
-            //     );
+          // var new_nodes = d3.range(d).map(function(){
+          //   return {
+          //     color:OCC_NAMES[o.key].color,
+          //     cx:x(d)
+          //   };
+          // });
+            nodes.push(
+                    {
+                        radius: maxRadius,
+                        color: OCC_NAMES[o.key].color,
+                        cx: x(d),
+                        cy: y(o.key),
+                    }//creating new nodes with a list of attributes for each
+                );
 
-            temp_nodes = temp_nodes.concat(new_nodes);
+            // temp_nodes = temp_nodes.concat(new_nodes);
         });
 
 
@@ -198,7 +198,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 
     }); // @end occ forEach
 
-    console.log("initial nodes: " + nodes.length);//total nodes should add up to 52
+    // console.log("initial nodes: " + nodes.length);//total nodes should add up to 52
     console.log(OCC_NAMES);
 
     var force = d3.layout.force()
@@ -277,13 +277,13 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 
             temp_data.forEach(function(d,i){
                 //console.log("inc",d);
-<<<<<<< HEAD
-                var new_nodes = d3.range(d).map(function(){
-                  return {
-                    color:OCC_NAMES[o.key].color,
-                    cx:x(d)
-                  };
-                });
+
+                // var new_nodes = d3.range(d).map(function(){
+                //   return {
+                //     color:OCC_NAMES[o.key].color,
+                //     cx:x(d)
+                //   };
+                // });
                 // nodes.push(
                 //         {
                 //             radius: maxRadius,
@@ -292,8 +292,8 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                 //             cy: y(o.key),
                 //         }//creating new nodes with a list of attributes for each
                 //     );
-            temp_nodes =  temp_nodes.concat(new_nodes);           //console.log(d)
-=======
+            // temp_nodes =  temp_nodes.concat(new_nodes);           //console.log(d)
+
                 nodes.push(
                         {
                             radius: maxRadius,
@@ -304,7 +304,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                     );
                         //console.log(d)
                 // temp_nodes = temp_nodes.concat(nodes);
->>>>>>> 8140b162a337dfedf76eeca6499b46cba4006c5c
+
             });
             OCC_NAMES[o.key].cnt = cnt_so_far;//creating 'cnt' attribute
 
