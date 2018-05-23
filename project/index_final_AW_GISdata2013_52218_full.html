@@ -23,7 +23,7 @@ circle {
 <div id="main-wrapper">
 <div id="controls">
 <div id="buttons">
-<h3>2070</h3>
+<h3>2013</h3>
 <!-- <div class="button current" data-val="0">2013</div>
 <div class="button" data-val="1">2030</div>
 <div class="button" data-val="2" style="margin-right:0">2070</div> -->
@@ -37,7 +37,7 @@ circle {
 <script>
 //var FAKE_DATA = [.01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01, .01, .02, .03, .20, .15, .14, .12, .10, .01, .01];
 // 40 in total, we don't actually use it.
-var DATA_FILE_LOC = "data/depth_tsv_GIS52216_modified_test500_2070.txt";
+var DATA_FILE_LOC = "data/depth_tsv_GIS52216_modified_full_2013.txt";
 var OCC_NAMES = {
   "2":	{ "name": "Back Bay       ", color: "#6b8ef7" },
   "4":	{ "name": "Charlestown       ", color: "#7b99f8" },
@@ -67,19 +67,18 @@ var OCC_NAMES = {
 }
 // 26 categories
 // var occs_in_order = [2,4,6,7,8,14,16,17,24,26,27,29,30,31,32,33,34];
-// var occs_in_order = [8,6,17,14,4,16,2,33,26,30,32,34,7,27,29,31];
 var occs_in_order = [8,6,17,14,4,7,29,16,31,2,33,26,30,32,34,27];
 // change the order of categories according to the features of the data
 
 var CURR_YEAR_INDEX = 0;
-var YEARS = [2070];
+var YEARS = [2013,2030,2070];
 //var USER_YEAR = 1970;
 
 var margin = {top: 70, right: 70, bottom: 50, left: 215 },
     width = 1200 - margin.left - margin.right,
-	height = 1600 - margin.top - margin.bottom,
-    padding = 2, // separation between nodes
-    maxRadius = 3.5,
+	height = 1000 - margin.top - margin.bottom,
+  padding = 2, // separation between nodes
+  maxRadius = 3.5,
     damper = 0.8;
 
 var n = 50, // total number of nodes -- used in var cnt = Math.round(d * n)
@@ -112,7 +111,6 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .tickSize(20)
     .tickFormat(function(d) {
-        console.log(d);
         return OCC_NAMES[d]['name'];
     })
     .orient("left");
@@ -121,17 +119,17 @@ var yAxis = d3.svg.axis()
 // Load data.
 d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 	if (error) throw error;
-    var value_fields = d3.range(1,579).map(function(d) { return "inc"+d});
-    console.log(value_fields) //returns inc row headers as index
+    var value_fields = d3.range(1,1931).map(function(d) { return "inc"+d});
     var occ = d3.nest()
         .key(function(d) { return d.neigh; })
         .entries(data);
-    console.log(occ);
+    // console.log(occ);
 
     // Init nodes based on props
     var nodes = [];
     occ.forEach(function(o,occ_i) {
         var curr_vals = o.values[CURR_YEAR_INDEX];
+        // console.log(o, curr_vals);
         var temp_data0 = value_fields.map(function(name) {
             return curr_vals[name]; //temp_data0 is pulling in the data for inc1,2,.....,42.
         });
@@ -142,23 +140,27 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
           } else {
             return d; }});
 
-        console.log(temp_data);
+        // console.log(temp_data);
 
         var cnt_so_far = 0;
 
         temp_data.forEach(function(d,i){
-
+          // var new_nodes = d3.range(d).map(function(){
+          //   return {
+          //     color:OCC_NAMES[o.key].color,
+          //     cx:x(d)
+          //   };
+          // });
             nodes.push(
                     {
                         radius: maxRadius,
                         color: OCC_NAMES[o.key].color,
-
                         cx: x(d),
                         cy: y(o.key),
                     }//creating new nodes with a list of attributes for each
                 );
 
-
+            // temp_nodes = temp_nodes.concat(new_nodes);
         });
 
 
@@ -199,8 +201,8 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 
     }); // @end occ forEach
 
-    console.log("initial nodes: " + nodes.length);//total nodes should add up to 52
-    console.log(OCC_NAMES);
+    // console.log("initial nodes: " + nodes.length);//total nodes should add up to 52
+    // console.log(OCC_NAMES);
 
     var force = d3.layout.force()
         .nodes(nodes)
@@ -256,13 +258,13 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 
     function timer() {
 
-        console.log(YEARS[CURR_YEAR_INDEX]);
+        var nodes = [];
 
-        var temp_nodes = [];
         occ.forEach(function(o,occ_i) {
             var curr_vals = o.values[CURR_YEAR_INDEX];
-            //console.log(curr_vals)
+
             var temp_data0 = value_fields.map(function(name) {
+              // console.log(name);
                 return curr_vals[name]; //temp_data0 is pulling in the data for inc1,2,.....,42.
             });
             //console.log(temp_data0)
@@ -272,39 +274,47 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
             var cnt_so_far = 0;
 
             temp_data.forEach(function(d,i){
-
                 //console.log("inc",d);
+
+                // var new_nodes = d3.range(d).map(function(){
+                //   return {
+                //     color:OCC_NAMES[o.key].color,
+                //     cx:x(d)
+                //   };
+                // });
+                // nodes.push(
+                //         {
+                //             radius: maxRadius,
+                //             color: OCC_NAMES[o.key].color,
+                //             cx: x(d),
+                //             cy: y(o.key),
+                //         }//creating new nodes with a list of attributes for each
+                //     );
+            // temp_nodes =  temp_nodes.concat(new_nodes);           //console.log(d)
 
                 nodes.push(
                         {
                             radius: maxRadius,
                             color: OCC_NAMES[o.key].color,
-
                             cx: x(d),
                             cy: y(o.key),
                         }//creating new nodes with a list of attributes for each
                     );
                         //console.log(d)
-            });
+                // temp_nodes = temp_nodes.concat(nodes);
 
+            });
             OCC_NAMES[o.key].cnt = cnt_so_far;//creating 'cnt' attribute
 
+            d3.range(nodes.length).map(function(i) {
+                var curr_node = nodes[i];
+                curr_node.cx = nodes[i].cx;
+                });
+
         });
-
         // console.log("nodes: " + nodes.length + "; temp_nodes: " + temp_nodes.length);
-        //
-        // d3.range(nodes.length).map(function(i) {
-        //     var curr_node = nodes[i];
-        //     curr_node.cx = temp_nodes[i].cx;
-        // });
-
         force.resume();
-
-        // CURR_YEAR_INDEX += 1;
-
-        // setTimeout(timer, 4000);
     }
-    // setTimeout(timer, 5000);
 
     function tick(e) {
       circle
