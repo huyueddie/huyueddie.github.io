@@ -104,7 +104,7 @@ var xAxis = d3.svg.axis()
             return d;
         }
     })//the function is setting the text on the scale, especially where to put the ">" mark
-    .tickSize(height+20)
+    .tickSize(height+30)
     .orient("top");
 var yAxis = d3.svg.axis()
     .scale(y)
@@ -132,7 +132,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
 
 
     function drawnodes(CURR_YEAR_INDEX) {
-        d3.select(".circle-svg").remove();
+        d3.select(".main-svg").remove();
 
         // Init nodes based on props
         var nodes = [];
@@ -161,6 +161,7 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
                             cy: y(o.key),
                         }//creating new nodes with a list of attributes for each
                     );
+
 
 
             });
@@ -236,8 +237,15 @@ d3.tsv(DATA_FILE_LOC, type, function(error, data) {
             // timer();
         });
 
+        // d3.selectAll(".button").on("click", function() {
+        //     svg.append("image")
+        //     .attr("xlink:href", 'capture.jpg');
+
+            // timer();
+        // });
+
         // .append("image")
-        //     .attr("xlink:href", 'https://assets-cdn.github.com/images/modules/open_graph/github-octocat.png')
+        //     .attr("xlink:href", '2013.png')
 
         function tick(e) {
         circle
